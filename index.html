@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GUEST BOARD</title>
+  <style type='text/css'>
+  @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+  body{
+    font-family: 'Nanum Gothic', serif;
+  }
+  h1{
+    color:#d9d9d9;
+  }
+  [class$="button"] {
+    visibility: hidden;
+  }
+  table{
+    width:600px;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    padding-left: 30px;
+    padding-right:30px;
+    padding-bottom: 25px;
+  }
+  .{
+
+  }
+  select{
+    width:350px;
+  }
+  .question{
+    font-size: 16pt;
+  }
+  .question td{
+    padding-bottom: 10px;
+  }
+  .answer td{
+    padding-bottom:10px;
+  }
+  .content{
+    margin: auto;
+    max-width:200px;
+    height: 100px;
+    word-break:normal;
+  }
+  .name{
+    text-align: right;
+  }
+  .write{
+
+  }
+  .insert_name{
+
+  }
+  .insert_gender{
+    width:100px;
+  }
+  .input div{
+    margin:10px 0px 10px 0px;
+  }
+
+  </style>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+  var id_check = function(id, gnum){
+    if(id){
+      var input = document.getElementById('input_id').value;
+      if(input==id){
+        $(function(){//아이디 입력창 가려주고 //버튼 등장
+          $('.input_id').fadeOut('slow');
+          $('.button'+gnum).animate({
+            visibility:visible
+          });
+        });
+      }else{
+        alert('잘못된 아이디를 입력하셨습니다');
+      }
+      //이 후 처리가 필요해 특정값을 리턴혹은 기타 등등해서 인증할 수 있도록
+    }else{
+      alert("ID를 등록하지 않은 게시글입니다"); //id확인하면 수정/삭제 가능하도록
+    }
+  }
+  </script>
+</head>
+<body>
+  <center>
+  <h1>GUEST BOARD</h1>
+  <form method='post'>
+  <table class='input' border=0 style="background-color:lightgray">
+    <tr>
+      <td colspan="3">
+        <div width=23px height=23px/>
+        <div width=20px height=20px/>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <!-- question -->
+        <div class='insert_question'>
+          <label for='question'>질문</label>
+          <select name='qnum'required>
+            <%
+            question.forEach(function(item, index){
+              %>
+              <option value="<%=item.qnum%>">
+                <%=item.question%>
+              </option>
+              <%
+            });
+            %>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td height='20px' colspan="3">
+        <!-- answer -->
+        <div class='insert_answer'>
+          <label for='answer'>답변</label>
+          <input type='text' name='answer' required/>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <!-- content -->
+        <div class='insert_content'>
+          <label for='content'>내용</label>
+          <input type='text' name='content' />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class='insert_name'>
+          <!-- name -->
+          <label for='name'>이름
+          <input type='text' size='10' name='name' />
+          </label>
+        </div>
+      </td>
+      <td>
+        <div class='insert_gender'>
+          <!-- name -->
+          <label for='woman'>W</label>
+          <input type='radio' name='gender' value='W' required/>
+          <input type='radio' name='gender' value='M' required/>
+          <label for='man'>M</label>
+        </div>
+      </td>
+      <td class='insert_id'>
+        <div>
+          <!-- name -->
+          <label for='id'>ID</label>
+          <input type='text' name='id' />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <div class='id_explain'>
+          아이디를 입력하실 경우 추후에 수정/삭제를 할 수 있습니다.
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class='submit'>
+          <input type='submit' />
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+<form method='post'>
+<div class='writed'>
+  <%
+  guest_board.forEach(function(item, index){
+    if(item.gender=='W'){
+  %>
+  <table border=0 style="background-color:#FFB8BE">
+  <%
+    }else{
+  %>
+  <table border=0 style="background-color:#BADBEF">
+  <%
+    }
+    question.forEach(function(qitem, index){
+      if(qitem.qnum==item.qnum){
+    %>
+    <tr>
+      <td>
+        <div class='input_id'>
+          <input type=text name='input_id' id='input_id' placeholder="id 입력"/>
+          <input type=button value='확인' onclick="id_check(<%=item.id%>, <%=item.gnum%>)" />
+        </div>
+      </td>
+      <td>
+        <div class='button<%=item.gnum%>'>
+          <a href='/update/<%=item.gnum%>'><img src='but_update.png' width=23px height=23px/></a>
+          <a href='/delete/<%=item.gnum%>'><img src='but_delete.png' width=20px height=20px/></a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class='question'>
+          <%= qitem.question %>
+        </div>
+      </td>
+    </tr>
+      <%
+        }
+      });
+      %>
+    <tr>
+      <td height='20px'>
+        <div class='answer'>
+          <%= item.answer %>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class='content'>
+          <%= item.content %>
+        </div>
+      </td>
+    </tr>
+    <tr class='name'>
+      <td>
+        <div>
+          <%= item.name %><span class='write'>쓰다</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+<%
+  });
+%>
+</div>
+</form>
+</center>
+</body>
+</html>
