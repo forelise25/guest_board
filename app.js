@@ -15,6 +15,7 @@ var app = express();
 app.use(bodyParser.urlencoded({
   extended:false
 }));
+app.use(express.static('public'));
 
 app.listen(8080, function(){
   console.log('server running at person.emirim.kr:8080');
@@ -50,4 +51,8 @@ app.get('/update/:for_num', function(request, response){
       });
     });
   });
+});
+app.post('/',function(request, response){
+  console.log("server right?");
+  //client.query('insert guest_board() into ')
 });
